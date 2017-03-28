@@ -635,8 +635,9 @@ std::vector<double> EventAlignment::getRecoStubPositions( )
     for(auto& stub : dutRecoStubmap()->at("C0"))  
     {
       double xStubPos = (stub.x-nstrips()/2)*dutpitch(); 
-      if( NOV_15 ) 
+#ifdef NOV_15  
         xStubPos = -1*xStubPos;
+#endif
       stubPositions.push_back( xStubPos );
     }
     return stubPositions;
@@ -647,9 +648,9 @@ std::vector<double> EventAlignment::getCbcStubPositions( )
     for(auto& stub : dutEv()->stubs)  
     {
       double xStubPos = (stub->x-nstrips()/2)*dutpitch(); 
-      if( NOV_15 ) 
+#ifdef NOV_15 
         xStubPos = -1*xStubPos;
-      
+#endif      
       stubPositions.push_back( xStubPos );
     }
     return stubPositions;
@@ -666,8 +667,9 @@ std::vector<double> EventAlignment::getClusterPositions( int pDetectorID , int m
    for(auto& cl : dutRecoClmap()->at(cDetectorName) ) 
    {
       double xClusterPos = (cl.x-nstrips()/2)*dutpitch(); 
-      if( NOV_15 ) 
+#ifdef NOV_15 
         xClusterPos = -1*xClusterPos;
+#endif
       if( cl.size <= maxClusterWidth && cl.size > 0 ) clusterPositions.push_back( xClusterPos );
    }
    return clusterPositions;
@@ -691,8 +693,9 @@ std::vector<double> EventAlignment::getHitPositions( vector<int> detHits )
   for( auto cHitDet  : detHits )
   {
     double xHitPos =  (cHitDet - nstrips()/2.0 )*dutpitch() ;
-    if( NOV_15 ) 
-      xHitPos = (nstrips()/2.0 - cHitDet )*dutpitch() ;
+#ifdef NOV_15 
+    xHitPos = (nstrips()/2.0 - cHitDet )*dutpitch() ;
+#endif
     hitPositions.push_back( xHitPos );
   }
   return hitPositions;
@@ -1369,21 +1372,18 @@ void EventAlignment::CorrelateFeI4Tracks(int groupID, int evOffset )
           double distance = std::sqrt( std::pow(xval-tkX,2.0) + std::pow(yval - tkY,2.0) ) ;
 
           matchedTrackID.push_back( itk );
-          if( NOV_15 )
-          {
+#ifdef NOV_15
             distance = std::sqrt( std::pow(-1*xval-tkY,2.0) + std::pow(yval - tkX,2.0) ) ;
             matchedTrackResidualX.push_back(-1*xval-tkY);
             //distance = std::sqrt( std::pow(-1*xval-tkY,2.0) + std::pow(yval - tkX,2.0) ) ;
             //matchedTrackResidualX.push_back(-1*xval-tkY);
             matchedTrackResidualY.push_back(yval-tkX);
-          }
+#elif defined(MAY_16) || defined(OCT_16)
           //original
-          else
-          {
             distance = std::sqrt( std::pow(xval-tkX,2.0) + std::pow(yval - tkY,2.0) ) ;
             matchedTrackResidualX.push_back(xval-tkX);
             matchedTrackResidualY.push_back(yval-tkY);
-          }
+#endif
           matchedTrackResidual.push_back(distance);
           matchedTrackChi2.push_back(chi2);
 
@@ -1707,8 +1707,9 @@ double EventAlignment::returnStrip( double xHit, double pitch )
 
   if( pitch == 0 ) pitch = dutpitch();
   double iStrip = xHit/pitch - nstrips()/2.0; 
-  if( NOV_15 )
+#ifdef NOV_15
      iStrip = -1*xHit/pitch + nstrips()/2.0; 
+#endif
   return iStrip;
 }
 double EventAlignment::returnHit( double iStrip, double pitch )
@@ -1716,10 +1717,11 @@ double EventAlignment::returnHit( double iStrip, double pitch )
 
   if( pitch == 0 ) pitch = dutpitch();
   double xHit;
-  if( NOV_15) 
-    xHit = (nstrips()/2.0 - iStrip)*pitch; 
-  else
-    xHit = (iStrip - nstrips()/2.0)*pitch; 
+#if defined(MAY_16) || defined(OCT_16)
+  xHit = (iStrip - nstrips()/2.0)*pitch; 
+#elif NOV_15 
+  xHit = (nstrips()/2.0 - iStrip)*pitch;
+#endif
   return xHit;
 }
 void EventAlignment::clusterCbcHits(std::vector<double> xHits, std::vector<double>& xPosClusters, std::vector<double>& sizeClusters , double maxClusterWidth )
@@ -2416,10 +2418,11 @@ double EventAlignment::ExtrapolateFeI4Hit_DUT( int itrk ,int pDetectorID )
   char detName[250]; sprintf(detName,"det%d", pDetectorID);
 
   double xExtrapolatedTkdut0;
-  if( NOV_15 )
-     xExtrapolatedTkdut0 = telEv()->xPos->at(itrk) + ( zOffset- alParsLocal_.FEI4z() )*telEv()->dxdz->at(itrk);
-  else
-    xExtrapolatedTkdut0 = telEv()->yPos->at(itrk) + ( zOffset- alParsLocal_.FEI4z() )*telEv()->dydz->at(itrk);
+#if defined(MAY_16) || defined(OCT_16)
+  xExtrapolatedTkdut0 = telEv()->yPos->at(itrk) + ( zOffset- alParsLocal_.FEI4z() )*telEv()->dydz->at(itrk);
+#elif NOV_15
+  xExtrapolatedTkdut0 = telEv()->xPos->at(itrk) + ( zOffset- alParsLocal_.FEI4z() )*telEv()->dxdz->at(itrk);
+#endif
   double xTk0 =  xExtrapolatedTkdut0 + xOffset; 
   return xTk0; 
 }
@@ -3271,16 +3274,14 @@ AllExtrapolatedHits EventAlignment::CorrelateFeI4Tracks(int groupID, int evOffse
            double chi2 = telEv()->chi2->at(itk); 
 
            double residualX, residualY; 
-           if( NOV_15 )
-           {
-              residualX = (-1*xval - fResidualX.first) - tkY ;
-              residualY = (yval - fResidualY.first) - tkX ;
-           }
-           else
-           {
-              residualX = (xval - fResidualX.first) - tkX ;
-              residualY = (yval - fResidualY.first) - tkY ;
-           }
+           
+#if defined(MAY_16) || defined(OCT_16)
+            residualX = (xval - fResidualX.first) - tkX ;
+            residualY = (yval - fResidualY.first) - tkY ;
+#elif NOV_15
+            residualX = (-1*xval - fResidualX.first) - tkY ;
+            residualY = (yval - fResidualY.first) - tkX ;
+#endif
            double distance = std::sqrt( std::pow(residualX,2) + std::pow(residualY,2)); //std::fabs(residualX) ;
            
            if( std::fabs(residualX) < windowSizeX*fFeI4_Window_x )
@@ -3293,17 +3294,13 @@ AllExtrapolatedHits EventAlignment::CorrelateFeI4Tracks(int groupID, int evOffse
            }
 
            double residualX_else, residualY_else;
-           if( NOV_15 )
-           {
-              residualX_else = (-1*xval - (fResidualX.first-10*fResidualX.second)) - tkY ;
-              residualY_else = (yval - fResidualY.first) - tkX ;
-           }
-           else
-           {
-              residualX_else = (xval - (fResidualX.first-10*fResidualX.second)) - tkX ;
-              residualY_else = (yval - fResidualY.first) - tkY ;
-           }
-
+#if defined(MAY_16) || defined(OCT_16)
+            residualX_else = (xval - (fResidualX.first-10*fResidualX.second)) - tkX ;
+            residualY_else = (yval - fResidualY.first) - tkY ;
+#elif NOV_15
+           residualX_else = (-1*xval - (fResidualX.first-10*fResidualX.second)) - tkY ;
+           residualY_else = (yval - fResidualY.first) - tkX ;
+#endif
            if( std::fabs(residualX_else) < windowSizeX*fFeI4_Window_x )
            {
               tkIDs_else.push_back( itk );

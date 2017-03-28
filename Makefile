@@ -1,5 +1,6 @@
 UNAME    = $(shell uname)
-EXE      = baselineReco deltaClusAnalysis alignmentReco telescopeAna eAlignment
+EXE      = baselineReco alignmentReco telescopeAna eAlignment
+#deltaClusAnalysis 
  
 VPATH  = .:./interface
 vpath %.h ./interface
@@ -23,7 +24,8 @@ CXXFLAGS += -g -std=c++11 -D$(BT_ERA)
 
 HDRS_DICT = interface/DataFormats.h interface/LinkDef.h
 
-bin: baselineReco basePGReco deltaClusAnalysis alignmentReco telescopeAna eAlignment
+bin: baselineReco basePGReco alignmentReco telescopeAna eAlignment
+#deltaClusAnalysis
 
 all: 
 	gmake cint 
@@ -32,7 +34,7 @@ cint: $(DICTC)
 
 $(DICTC): $(HDRS_DICT)
 	@echo "Generating dictionary $(DICTC) and $(DICTH) ..."
-	rootcint -f $@ -c $(CXXFLAGS) $^ 
+	rootcint -f $@ -c $(CXXFLAGS) `root-config --cflags` $^ 
 	perl -pi -e 's#interface/##' $(DICTH) 
 	perl -pi -e 's/#include <math.h>/#include <math.h>\n#include <map>/'  $(DICTH)
 	mv $(DICTC) src/
@@ -54,9 +56,9 @@ AlignmentMultiDimAnalysis.o : src/AlignmentMultiDimAnalysis.cc
 	$(CXX)  $(CXXFLAGS) -Wdeprecated-declarations `root-config --cflags` -o $@ -c $<
 	mv $@ ../src/
 
-DeltaClusterAnalysis.o : src/DeltaClusterAnalysis.cc
-	$(CXX)  $(CXXFLAGS) `root-config --cflags` -o $@ -c $<
-	mv $@ ../src/
+#DeltaClusterAnalysis.o : src/DeltaClusterAnalysis.cc
+#	$(CXX)  $(CXXFLAGS) `root-config --cflags` -o $@ -c $<
+#	mv $@ ../src/
 
 EventAlignment.o : src/EventAlignment.cc
 	$(CXX)  $(CXXFLAGS) `root-config --cflags` -o $@ -c $<
@@ -75,8 +77,8 @@ telescopeAna:   src/telescopeAna.cc $(OBJS) src/TelescopeAnalysis.o src/Dict.o
 alignmentReco:   src/alignmentReco.cc $(OBJS) src/AlignmentMultiDimAnalysis.o src/Dict.o
 	$(CXX) $(CXXFLAGS) `root-config --cflags` $(LDFLAGS) $^ -o $@ $(LIBS) `root-config --libs ` -lMinuit2
 
-deltaClusAnalysis: src/dclusAnalysis.cc $(OBJS) src/DeltaClusterAnalysis.o src/Dict.o
-	$(CXX) $(CXXFLAGS) `root-config --cflags` $(LDFLAGS) $^ -o $@ $(LIBS) `root-config --libs`
+#deltaClusAnalysis: src/dclusAnalysis.cc $(OBJS) src/DeltaClusterAnalysis.o src/Dict.o
+#	$(CXX) $(CXXFLAGS) `root-config --cflags` $(LDFLAGS) $^ -o $@ $(LIBS) `root-config --libs`
 
 eAlignment: src/eAlignment.cc $(OBJS) src/EventAlignment.o  src/Dict.o
 	$(CXX) $(CXXFLAGS) `root-config --cflags` $(LDFLAGS) $^ -o $@ $(LIBS) `root-config --libs`

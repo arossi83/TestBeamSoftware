@@ -110,7 +110,7 @@ void AlignmentMultiDimAnalysis::eventLoop()
   //First do telescope-fei4 matching 
   al = aLparameteres();
   doTelescopeAnalysis(al);
-#ifdef MAY_16
+#if defined(MAY_16) || defined(OCT_16)
   float DUT_z = 460.0;//oct16=460;//may16=435
   float DUT_z_try = 400;  
 #elif NOV_15

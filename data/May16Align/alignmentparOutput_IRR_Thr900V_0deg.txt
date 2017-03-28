@@ -1,0 +1,17 @@
+Run=727;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=728;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=729;:offsetFEI4X=-3.59894:offsetFEI4Y=-0.85021:residualSigmaFEI4X=0.0391204:residualSigmaFEI4Y=0.159266:zD0=437.438:offsetD0=4.49219:deltaZ=3.41704:angle=0.355133
+Run=730;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=731;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=732;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=733;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=734;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=735;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=736;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=737;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=738;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=739;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=740;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=743;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=741;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009
+Run=742;:offsetFEI4X=-3.56646:offsetFEI4Y=-0.867053:residualSigmaFEI4X=0.033312:residualSigmaFEI4Y=0.144849:zD0=434.438:offsetD0=4.51494:deltaZ=2.59209:angle=0.490009

@@ -48,8 +48,10 @@ void Histogrammer::bookEventHistograms() {
 void Histogrammer::bookDUTHistograms(std::string det) 
 {
   int nStrips = 254; 
-  if( NOV_15 )
-    nStrips = nStrips*4;
+
+#ifdef NOV_15
+  nStrips = nStrips*4;
+#endif
 
   TString d(det);
   fout_->cd();
@@ -319,9 +321,9 @@ void Histogrammer::bookCorrelationHistoForColumn(TString c) {
 void Histogrammer::bookTrackMatchHistograms() 
 {
   int nStrips = 254; 
-  if( NOV_15 )
-    nStrips = nStrips*4;
-
+#ifdef NOV_15 
+  nStrips = nStrips*4;
+#endif
   fout_->mkdir("TrackMatch");
   fout_->cd("TrackMatch");
   new TH1D("nTrackParams","#Tracks Telescope;#tracks;#events",30,-0.5,29.5);
@@ -372,7 +374,14 @@ void Histogrammer::bookTrackMatchHistograms()
   new TH1D("hposx_dut1","Xpos of hit on DUT1 plane; x_{DUT} [mm]; Events [a.u]",90/(90e-3),-45.,45.);
   new TH1D("hposCluster_dut0","Xpos of Cluster in Det0; x_{Cluster} [mm]; Count [a.u]",(36/(0.09/10)), -18.0, 18.0);
   new TH1D("hposCluster_dut1","Xpos of Cluster in Det1; x_{Cluster} [mm]; Count [a.u]",(36/(0.09/10)), -18.0, 18.0);
-  
+
+  TH1D* h1d = dynamic_cast<TH1D*>(Utility::getHist1D("hposx_dut0"));
+  h1d->SetLineColor(kRed);
+  h1d->GetXaxis()->SetRangeUser(-12,12);
+  h1d = dynamic_cast<TH1D*>(Utility::getHist1D("hposx_dut1"));
+  h1d->SetLineColor(kRed);
+  h1d->GetXaxis()->SetRangeUser(-12,12);
+
   new TH1D("hposxTk","Xpos of matched track on FeI4 plane; x_{Track} [mm]; Events [a.u]",40/(250e-3),-20.,20.);
   new TH1D("hposyTk","Ypos of matched track on FeI4 plane; y_{Track} [mm]; Events [a.u]",40/(50e-3),-20.,20.);
   new TH1D("hposxTk_A","Xpos of matched track on FeI4 plane (after alignment); x_{Track} [mm]; Events [a.u]",40/(250e-3),-20.,20.);
@@ -382,10 +391,21 @@ void Histogrammer::bookTrackMatchHistograms()
   new TH1D("hminposClsDUT0","Xpos of the cluster hit at DUT0 plane with min dist from track(#fid trk=1)",100,-20.,20.);
   new TH1D("hminposClsDUT1","Xpos of the cluster hit at DUT1 plane with min dist from track(#fid trk=1)",100,-20.,20.);
   new TH1D("hminposStub","Xpos of the stub hit with min dist from trk(#fid trk=1)",100,-20.,20.);
+   h1d = dynamic_cast<TH1D*>(Utility::getHist1D("hposxTk_dut0"));
+  h1d->GetXaxis()->SetRangeUser(-12,12);
+  h1d->SetLineColor(kBlue);
+  h1d->SetFillColor(kBlue);
+  h1d->SetFillStyle(3002);
+  h1d->GetXaxis()->SetRangeUser(-12,12);
+  h1d = dynamic_cast<TH1D*>(Utility::getHist1D("hposxTk_dut1"));
+  h1d->GetXaxis()->SetRangeUser(-12,12);
+  h1d->SetLineColor(kBlue);
+  h1d->SetFillColor(kBlue);
+  h1d->SetFillStyle(3002);
   
+
   new TH2D("TrkCluster_Det0","Trk/Cluster Correlation;x_{Track} [mm]; x_{Cluster} [mm]",(36/(0.09/10)), -18.0, 18.0, (36/(0.09/10)), -18.0, 18.0 );
   new TH2D("TrkCluster_Det1","Trk/Cluster Correlation;x_{Track} [mm]; x_{Cluster} [mm]",(36/(0.09/10)), -18.0, 18.0, (36/(0.09/10)), -18.0, 18.0 );
-  
   new TH2D("minclsTrkPoscorrD0","Cluster xTrk Pos Correlation;trk;cluster",nStrips+1,-0.5,nStrips - 0.5, nStrips+1,-0.5,nStrips - 0.5 );
   new TH2D("minclsTrkPoscorrD1","Cluster xTrk Pos Correlation;trk;cluster",nStrips+1,-0.5,nStrips - 0.5, nStrips+1,-0.5,nStrips - 0.5 );
   TH2D* h2d = dynamic_cast<TH2D*>(Utility::getHist2D("minclsTrkPoscorrD0"));
@@ -424,7 +444,7 @@ void Histogrammer::bookTrackMatchHistograms()
   h->GetXaxis()->SetBinLabel(6,"xtkClsMatchD1");
   h->GetXaxis()->SetBinLabel(7,"xtkClsMatchD0_&&_D1");
   h->GetXaxis()->SetBinLabel(8,"no-match_D0&&_D1");
-  h->GetXaxis()->SetBinLabel(9,"xtkStubMatchC0")
+  h->GetXaxis()->SetBinLabel(9,"xtkStubMatchC0");
   h->GetXaxis()->SetBinLabel(10,"xtkCBCStubMatchC0");
   h->GetXaxis()->SetBinLabel(11,"xtkCBCStubWrongC0");
   h->GetXaxis()->SetBinLabel(12,"xtkCBCStub>1");
@@ -449,7 +469,7 @@ void Histogrammer::bookTrackMatchHistograms()
   new TH1I("effChip0Vtdc_den",";TDC;#Events",17,-0.5,16.5);
   new TH1I("effChip1Vtdc_den",";TDC;#Events",17,-0.5,16.5);
   
-  new TH1I("effVtdc_num",";TDC;#Count",17,-0.5,16.5);
+  //new TH1I("effVtdc_den",";TDC;#Count",17,-0.5,16.5);
   new TH1I("effVtdc_den",";TDC;#Count",17,-0.5,16.5);
 
   new TH1D("deltaXPos_trkfei4", "Difference in Track impact and Hit X Position after alignment; x_{FeI4} - (x_{Track} + x_{Offset}); Counts;", (24/(250e-3/10.0)), -12.0, 12.0);
@@ -536,6 +556,7 @@ void Histogrammer::bookTrackMatchHistograms()
   new TH1D("ClusterDiff","ClusterDiff;Strip Number;#Events",20,0,20);
   new TH2D("ClusDifvsRes","ClusDifvsRes;Strip Number;Res. (mm)",40,-20,20,500,-4,4);
 
+  fout_->cd("TrackMatch");
   new TProfile("nfidtrk_1k","#Events with 1 Fiducial Tracks;Event Number (#times 1000);Entries for 1000 events",10000,0.5,10000.5);
   new TProfile("nmatchedStub_1k","#Events with Stub Matched;Event Number (#times 1000);Entries for 1000 events",10000,-0.5,10000.5);
 
@@ -583,24 +604,6 @@ void Histogrammer::bookTrackMatchHistograms()
   h2d = dynamic_cast<TH2D*>(Utility::getHist2D("correlationTksFeI4Hits"));
   h2d->SetOption("colz");
 
-  TH1D* h1d = dynamic_cast<TH1D*>(Utility::getHist1D("hposx_dut0"));
-  h1d->SetLineColor(kRed);
-  h1d->GetXaxis()->SetRangeUser(-12,12);
-  h1d = dynamic_cast<TH1D*>(Utility::getHist1D("hposx_dut1"));
-  h1d->SetLineColor(kRed);
-  h1d->GetXaxis()->SetRangeUser(-12,12);
-
-  h1d = dynamic_cast<TH1D*>(Utility::getHist1D("hposxTk_dut0"));
-  h1d->GetXaxis()->SetRangeUser(-12,12);
-  h1d->SetLineColor(kBlue);
-  h1d->SetFillColor(kBlue);
-  h1d->SetFillStyle(3002);
-  h1d->GetXaxis()->SetRangeUser(-12,12);
-  h1d = dynamic_cast<TH1D*>(Utility::getHist1D("hposxTk_dut1"));
-  h1d->GetXaxis()->SetRangeUser(-12,12);
-  h1d->SetLineColor(kBlue);
-  h1d->SetFillColor(kBlue);
-  h1d->SetFillStyle(3002);
 
 
   new TH2F("hHitTkX", "Correlation between (X) FeI4 hit and matched track; x_{FeI4} [mm]; x_{Track} [mm]",(int)(40.0/250e-3) , -20.0, 20.0,  (int)(40.0/250e-3) , -20.0, 20.0); 
@@ -747,16 +750,12 @@ void Histogrammer::bookTelescopeAnalysisHistograms() {
   
 
   int nBins = (20e-3/20);
-  if( NOV_15 )
-  {
+  new TH1D("deltaXPos", "Difference in Track impact and FeI4 Cluster X Position; x_{FeI4} - x_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
+  new TH1D("deltaYPos", "Difference in Track Impact and FeI4 Cluster Y Position; y_{FeI4} - y_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
+#ifdef NOV_15 
     new TH1D("deltaXPos", "Difference in Track Impact and FeI4 Cluster X Position; -x_{FeI4} - y_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
     new TH1D("deltaYPos", "Difference in Track impact and FeI4 Cluster Y Position; y_{FeI4} - x_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
-  }
-  else
-  {
-    new TH1D("deltaXPos", "Difference in Track impact and FeI4 Cluster X Position; x_{FeI4} - x_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
-    new TH1D("deltaYPos", "Difference in Track Impact and FeI4 Cluster Y Position; y_{FeI4} - y_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
-  }
+#endif
   new TH1F("deltaDistance", "Distance between track and hit",  40000, -20.0, 20.0);
   new TH1F("deltaXPos_SinglePixel", "Difference in Track impact and Hit X Position (Single Pixel Hit)", 40000 , -20.0, 20.0);
   new TH1F("deltaXPos_SinglePixel_BSub", "Difference in Track impact and Hit X Position (Single Pixel Hit)", 40000 , -20.0, 20.0);
@@ -928,9 +927,9 @@ void Histogrammer::bookCBCHistograms(std::string cbc)
   fout_->mkdir(d);
   fout_->cd(d);
   int nStrips = 254; 
-  if( NOV_15 )
-    nStrips = nStrips*4;
-
+#ifdef NOV_15 
+  nStrips = nStrips*4;
+#endif
   double xMin = -1.0*0.09*1.5*nStrips; 
   double xMax = 1.0*0.09*1.5*nStrips;
   double xBin = 0.09/1.0;  
