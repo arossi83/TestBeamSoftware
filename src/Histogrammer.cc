@@ -750,11 +750,11 @@ void Histogrammer::bookTelescopeAnalysisHistograms() {
   
 
   int nBins = (20e-3/20);
-  new TH1D("deltaXPos", "Difference in Track impact and FeI4 Cluster X Position; x_{FeI4} - x_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
-  new TH1D("deltaYPos", "Difference in Track Impact and FeI4 Cluster Y Position; y_{FeI4} - y_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
+  new TH1F("deltaXPos", "Difference in Track impact and FeI4 Cluster X Position; x_{FeI4} - x_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
+  new TH1F("deltaYPos", "Difference in Track Impact and FeI4 Cluster Y Position; y_{FeI4} - y_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
 #ifdef NOV_15 
-    new TH1D("deltaXPos", "Difference in Track Impact and FeI4 Cluster X Position; -x_{FeI4} - y_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
-    new TH1D("deltaYPos", "Difference in Track impact and FeI4 Cluster Y Position; y_{FeI4} - x_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
+    new TH1F("deltaXPos", "Difference in Track Impact and FeI4 Cluster X Position; -x_{FeI4} - y_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
+    new TH1F("deltaYPos", "Difference in Track impact and FeI4 Cluster Y Position; y_{FeI4} - x_{Track}; Counts", (40.0)/5e-3 , -20.0, 20.0);
 #endif
   new TH1F("deltaDistance", "Distance between track and hit",  40000, -20.0, 20.0);
   new TH1F("deltaXPos_SinglePixel", "Difference in Track impact and Hit X Position (Single Pixel Hit)", 40000 , -20.0, 20.0);
@@ -810,9 +810,9 @@ void Histogrammer::bookTelescopeAnalysisHistograms() {
   h1->SetFillColor(kGreen);
   h1->SetFillStyle(3001);
   
-  TH1D* h1f = dynamic_cast<TH1D*>(Utility::getHist1D("deltaXPos"));
+  TH1F* h1f = dynamic_cast<TH1F*>(Utility::getHist1D("deltaXPos"));
   h1f->SetLineColor(kGreen);
-  h1f = dynamic_cast<TH1D*>(Utility::getHist1D("deltaYPos"));
+  h1f = dynamic_cast<TH1F*>(Utility::getHist1D("deltaYPos"));
   h1f->SetLineColor(kBlue);
 
 }

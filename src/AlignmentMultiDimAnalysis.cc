@@ -45,7 +45,7 @@ void AlignmentMultiDimAnalysis::beginJob() {
   setAddresses();
   nEntries_ = analysisTree()->GetEntries();
 
-#ifdef MAY_16
+#if defined(MAY_16) || defined(OCT_16)
    zMin = 200.;
 #elif NOV_15
    zMin = 1000.;
@@ -190,6 +190,10 @@ void AlignmentMultiDimAnalysis::eventLoop()
         selectedTk_d0_1Hit.push_back(selectedTk[0]);
         d0_DutXpos.push_back(xDUT);
 	float xTkAtDUT = selectedTk[0].xPos + (DUT_z- al.FEI4z())*selectedTk[0].dxdz;
+#ifdef OCT_16
+        xTkAtDUT = selectedTk[0].yPos + (DUT_z- al.FEI4z())*selectedTk[0].dydz;
+        xTkAtDUT *= -1;
+#endif
         hist_->fillHist1D("TrackFit","d0_1tk1Hit_diffX_bis", xDUT-xTkAtDUT);
 	DUT_z_try = zMin; //300
       }
@@ -204,6 +208,10 @@ void AlignmentMultiDimAnalysis::eventLoop()
         d1_DutXpos.push_back(xDUT);
 	float xTkAtDUT = selectedTk[0].xPos + (DUT_z- al.FEI4z())*selectedTk[0].dxdz;
         //xTkAtDUT = -1.*xTkAtDUT;
+#ifdef OCT_16
+        xTkAtDUT = selectedTk[0].yPos + (DUT_z- al.FEI4z())*selectedTk[0].dydz;
+        xTkAtDUT = -1.*xTkAtDUT;
+#endif
         hist_->fillHist1D("TrackFit","d1_1tk1Hit_diffX_bis", xDUT-xTkAtDUT);
 	DUT_z_try = zMin;//300;
       }
@@ -225,6 +233,10 @@ void AlignmentMultiDimAnalysis::eventLoop()
       }
       float xTkAtDUT = selectedTk[0].xPos + (DUT_z-al.FEI4z())*selectedTk[0].dxdz;
       float yTkAtDUT = selectedTk[0].yPos + (DUT_z-al.FEI4z())*selectedTk[0].dydz;
+#ifdef OCT_16
+      xTkAtDUT = selectedTk[0].yPos + (DUT_z-al.FEI4z())*selectedTk[0].dydz;
+      yTkAtDUT = selectedTk[0].xPos + (DUT_z-al.FEI4z())*selectedTk[0].dxdz;
+#endif
       selectedTk_bothPlanes_1Cls.push_back(selectedTk[0]);
       bothPlanes_DutXposD0.push_back(D0xDUT);
       bothPlanes_DutXposD1.push_back(D1xDUT);
@@ -273,7 +285,7 @@ void AlignmentMultiDimAnalysis::eventLoop()
   doD1 = false;
   double chi2 = 0;
 
-#ifdef MAY_16
+#if defined(MAY_16) || defined(OCT_16)
   minimizer->SetLimitedVariable(0, "offset", offset_init_d0, 0.0001, -6., 6.);
   minimizer->SetLimitedVariable(1, "zDUT", 435., 0.01, 200., 800.);
 #elif NOV_15
@@ -301,7 +313,7 @@ void AlignmentMultiDimAnalysis::eventLoop()
   doD0 = false;
   doD1 = true;
   minimizer->Clear();
-#ifdef MAY_16
+#if defined(MAY_16) || defined(OCT_16)
   minimizer->SetLimitedVariable(0, "offset", offset_init_d1, 0.0001, -6., 6.);
   minimizer->SetLimitedVariable(1, "zDUT", 435., 0.01, 200., 800.);
 #elif NOV_15
@@ -335,7 +347,7 @@ void AlignmentMultiDimAnalysis::eventLoop()
   doD0 = true;
   doD1 = true;
   minimizerBothPlanes->Clear();
-#ifdef MAY_16
+#if defined(MAY_16) || defined(OCT_16)
   minimizerBothPlanes->SetLimitedVariable(0, "offset_d0", offset_init_d0, 0.0001, -6., 6.);
   minimizerBothPlanes->SetLimitedVariable(1, "zDUT_d0", 435., 0.01, 200., 800.);
   minimizerBothPlanes->SetLimitedVariable(2, "offset_d1", offset_init_d1, 0.0001, -6., 6.);
@@ -378,7 +390,7 @@ void AlignmentMultiDimAnalysis::eventLoop()
   doD1 = true;
   minimizerBothPlanesConstraint->Clear();
 
-#ifdef MAY_16
+#if defined(MAY_16) || defined(OCT_16)
   minimizerBothPlanesConstraint->SetLimitedVariable(0, "offset_d0", offset_init_d0, 0.0001, -6., 6.);
   minimizerBothPlanesConstraint->SetLimitedVariable(1, "zDUT_d0", resultBothPlanes[1], 0.01, 200., 800.);
 
@@ -911,6 +923,11 @@ void AlignmentMultiDimAnalysis::doTelescopeAnalysis(tbeam::alignmentPars& aLp) {
       //std::cout << i<< std::endl;
       double tkX = tkNoOv[i].xPos;//-1.*tkNoOv[i].xPos;
       double tkY = tkNoOv[i].yPos;
+#ifdef OCT_16
+      tkX = tkNoOv[i].yPos;
+      tkX *= -1.;
+      tkY = tkNoOv[i].xPos;
+#endif
       hist_->fillHist1D("TelescopeAnalysis","TkXPos", tkX);
       hist_->fillHist1D("TelescopeAnalysis","TkYPos", tkY);
     }
@@ -934,6 +951,11 @@ void AlignmentMultiDimAnalysis::doTelescopeAnalysis(tbeam::alignmentPars& aLp) {
     for(unsigned int itk = 0; itk < tkNoOv.size(); itk++) {
       double tkX = tkNoOv[itk].xPos;//-1.*tkNoOv[itk].xPos; 
       double tkY = tkNoOv[itk].yPos; 
+#ifdef OCT_16
+      tkX = tkNoOv[itk].yPos;
+      tkX *= -1.;
+      tkY = tkNoOv[itk].xPos;
+#endif
       for (unsigned int i = 0; i < fei4Ev()->nPixHits; i++) {   
         double xval = 8.375 - (fei4Ev()->row->at(i)-1)*0.05;
         double yval = 9.875 - (fei4Ev()->col->at(i)-1)*0.250;
@@ -954,6 +976,7 @@ void AlignmentMultiDimAnalysis::doTelescopeAnalysis(tbeam::alignmentPars& aLp) {
 
   //Fit residual in Y direction//Perpendicular to strips in DUT
    TH1F* htmp = dynamic_cast<TH1F*>(hist_->GetHistoByName("TelescopeAnalysis","deltaYPos"));
+   if(!htmp) std::cout << "Histo TelescopeAnalysis/deltaYPos does not exist!" << std::endl;
    float center = ((float)htmp->GetMaximumBin())*(htmp->GetXaxis()->GetXmax()-htmp->GetXaxis()->GetXmin())/((float)htmp->GetNbinsX()) + htmp->GetXaxis()->GetXmin();  
    htmp->SetAxisRange(center-0.5, center+0.5, "X");
    TF1* fPol1Gaus_y = new TF1("FuncPol1Gausy", Utility::FuncPol1Gaus, center-0.5, center+0.5, 5);
@@ -1013,6 +1036,11 @@ void AlignmentMultiDimAnalysis::doTelescopeAnalysis(tbeam::alignmentPars& aLp) {
     for(unsigned int itk = 0; itk < tkNoOv.size(); itk++) {
       double tkX = tkNoOv[itk].xPos;//-1.*tkNoOv[itk].xPos;
       double tkY = tkNoOv[itk].yPos;
+#ifdef OCT_16
+      tkX = tkNoOv[itk].yPos;
+      tkX *= -1.;
+      tkY = tkNoOv[itk].xPos;
+#endif
       for (unsigned int i = 0; i < fei4Ev()->nPixHits; i++) {
         double xval = 8.375 - (fei4Ev()->row->at(i)-1)*0.05;
         double yval = 9.875 - (fei4Ev()->col->at(i)-1)*0.250;
@@ -1107,6 +1135,11 @@ void AlignmentMultiDimAnalysis::doTelescopeAnalysis(tbeam::alignmentPars& aLp) {
     for(unsigned int itk = 0; itk < tkNoOv.size(); itk++) {
       double tkX = tkNoOv[itk].xPos;//-1.*tkNoOv[itk].xPos;//-1.*telEv()->xPos->at(itk);
       double tkY = tkNoOv[itk].yPos;//telEv()->yPos->at(itk);
+#ifdef OCT_16
+      tkX = tkNoOv[itk].yPos;
+      tkX *= -1.;
+      tkY = tkNoOv[itk].xPos;
+#endif
       for (unsigned int i = 0; i < fei4Ev()->nPixHits; i++) {   
         //default pitch and dimensions of fei4 plane
         double xval = 8.375 - (fei4Ev()->row->at(i)-1)*0.05;

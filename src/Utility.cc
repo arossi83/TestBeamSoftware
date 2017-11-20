@@ -82,7 +82,9 @@ namespace Utility {
     int ncbcSw = 0;
     if (sWord > 0) {
 	for (unsigned int i = 0; i < 16; i++) {
+#ifdef NOV_15
           if (i == 11 || i == 13) continue;//only for nov15
+#endif
           if ((sWord >> i) & 0x1) {
             ncbcSw++;
 	    if (i <= 7) stubids.at("C0").push_back(i);
@@ -220,6 +222,10 @@ namespace Utility {
       const tbeam::Track tTemp(tkNoOverlap.at(itk));
       double tkX = tTemp.xPos;
       double tkY = tTemp.yPos;
+#ifdef OCT_16
+      tkX = -1.*tTemp.yPos;
+      tkY = tTemp.xPos;
+#endif
       if (!doClosestTrack){
         minresx = 999.;
         minresy = 999.;
@@ -228,6 +234,10 @@ namespace Utility {
       for (unsigned int i = 0; i < fei4ev->col->size(); i++) {
         double xval = 8.375 - (fei4ev->row->at(i)-1)*0.05;
         double yval = 9.875 - (fei4ev->col->at(i)-1)*0.250;
+#ifdef OCT_16
+        yval = 9.875 - (fei4ev->col->at(i)-1)*0.250;
+        xval = 8.375 - (fei4ev->row->at(i)-1)*0.05;
+#endif
         double xres = xval - tkX - xResMean;
         double yres = yval - tkY - yResMean;
         if (sqrt(xres*xres+yres*yres)<mindelta){
@@ -249,6 +259,10 @@ namespace Utility {
 
     //Compute distance between DUT center and track impact at DUT along X 
     double xTkAtDUT = track.xPos + (zDUT - FEI4_z) * track.dxdz;
+#ifdef OCT_16
+    xTkAtDUT = track.yPos + (zDUT - FEI4_z) * track.dydz;
+    xTkAtDUT *= -1.;
+#endif
     xTkAtDUT = (xTkAtDUT + offset)/ (cos(theta)*(1.-track.dxdz*tan(theta)));
     return xTkAtDUT; 
   }
@@ -257,10 +271,18 @@ namespace Utility {
 
     //Compute distance between DUT center and track impact at DUT along X 
     double xTkAtDUT_d0 = track.xPos + (zDUT_d0 - FEI4_z) * track.dxdz;
+#ifdef OCT_16
+    xTkAtDUT_d0 = track.yPos + (zDUT_d0 - FEI4_z) * track.dydz;
+    xTkAtDUT_d0 *= -1.;
+#endif
     xTkAtDUT_d0 = (xTkAtDUT_d0 + offset_d0)/ (cos(theta)*(1.-track.dxdz*tan(theta)));
 
     double zDUT_d1 = zDUT_d0 + deltaZ*cos(theta);
     double xTkAtDUT_d1 = track.xPos + (zDUT_d1 - FEI4_z) * track.dxdz;
+#ifdef OCT_16
+    xTkAtDUT_d1 = track.yPos + (zDUT_d1 - FEI4_z) * track.dydz;
+    xTkAtDUT_d1 *= -1;
+#endif
     double offset_d1 = offset_d0 + sin(theta)*deltaZ;
     xTkAtDUT_d1 = (xTkAtDUT_d1 + offset_d1)/ (cos(theta)*(1.-track.dxdz*tan(theta)));
 

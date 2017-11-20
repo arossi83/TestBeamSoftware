@@ -2,11 +2,22 @@
 ## Installation
 
 Set up ROOT(works with ROOT 5, requires ROOT to be compiled with libminut2)
+##On lxplus, you can setup gcc and root as follows
+source /afs/cern.ch/sw/lcg/external/gcc/4.9/x86_64-slc6-gcc49-opt/setup.sh
 
-After checking out the code:-
+source /afs/cern.ch/sw/lcg/app/releases/ROOT/5.34.36/x86_64-slc6-gcc49-opt/root/bin/thisroot.sh
+
+git clone https://github.com/sroychow/TestBeamSoftware.git
+
+cd TestBeamSoftware
+
+git checkout may16dev
+
+#Set to NOV_15 or MAY_16 or OCT_16
+setenv  BT_ERA OCT_16
+
 make cint
-
-make 
+make
 
 ## Usage
 ##Running on tuple
@@ -15,7 +26,7 @@ make
 
 ./alignmentReco \<jobcardName\>
 
-Apart from a root file with all the histograms, the application also produces a text file with all the alignment parameters. 
+Apart from a root file with all the histograms, the application also produces a text file with all the alignment parameters.*** 
 This application can be run in "production" or "new" mode(can be set in the job card). If you run in production mode, the 
 alignment output parameter file will be opened in append mode. It can be used for analysing many runs and dunping the 
 output in the same file. In the "new" mode, a new alignment output file will be created and if a file exists with the same name,
@@ -95,3 +106,4 @@ deltaZ=difference in Z pos between DUT0 and DUT1
 angle=DUT angle w.r.t beam
 
 **If alignment parameters are read from file, the code searches for the Run Number and takes the alignment parameters from that line.
+***For TDR, use the alignment parameters under data directory
