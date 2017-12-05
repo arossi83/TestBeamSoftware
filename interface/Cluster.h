@@ -12,6 +12,7 @@ class cluster : public TObject {
   size(999),
   threshold(0)
   {}
+
   cluster(unsigned int fStrip, unsigned int ftRow, unsigned int ed, unsigned int col, uint16_t s) :
   firstStrip(fStrip),
   firstRow(ftRow),

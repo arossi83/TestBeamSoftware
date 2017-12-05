@@ -1,0 +1,15 @@
+{ decls }
+namespace tbeam {  }
+
+[  ]
+# List of selected classes
+class tbeam::Event
+class tbeam::Track
+class tbeam::cbc
+class tbeam::cluster
+class tbeam::stub
+header interface/Event.h
+header interface/Track.h
+header interface/Cbc.h
+header interface/Cluster.h
+header interface/Stub.h
