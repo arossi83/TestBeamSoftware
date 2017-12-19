@@ -1,3 +1,4 @@
+=======
 ## Beam Test Data Analysis 
 ##Merging Code: Takes Ntuple from EDM, Telescope and merges into one Analysis Tree for user
 The code fill the Track vector inside the EDM ntuple
@@ -5,6 +6,7 @@ The code fill the Track vector inside the EDM ntuple
 
 Set up ROOT(works with ROOT 6)
 
+After checking out the code:-
 make cint
 
 make 
@@ -13,4 +15,4 @@ make
 ##
 ./ntuplemerger \<EDMTupleName\> \<TelescopeTupleName\> \<RunNumber\>
 
-It produces 1 files AnalysisTree_RunNumber.root
+It produces 1 file AnalysisTree_RunNumber.root

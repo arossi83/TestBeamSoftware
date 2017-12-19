@@ -7,10 +7,45 @@ namespace tbeam {
 class Track : public TObject {
  public:
   Track():
-    xPos_(0.),yPos_(0.),dxdz_(0.),dydz_(0.),chi2_(0.),ndof_(0.),xPosError_(0.),yPosError_(0.){} 
+    xPos_(0.),yPos_(0.),dxdz_(0.),dydz_(0.),chi2_(0.),ndof_(0.),xPosError_(0.),yPosError_(0.)
+    {
+      xPosPrevHit_ = 0.;
+      yPosPrevHit_ = 0.;
+      xPosErrsPrevHit_ = 0.;
+      yPosErrsPrevHit_ = 0.;
+      xPosNextHit_ = 0.;
+      yPosNextHit_ = 0.;
+      xPosErrNextHit_ = 0.;
+      yPosErrNextHit_ = 0.;
+    } 
   Track(const float x, const float y, const float dxdz, const float dydz, 
         const float chi2, const float ndof, const float xErr, const float yErr):
-    xPos_(x),yPos_(y),dxdz_(dxdz),dydz_(dydz),chi2_(chi2),ndof_(ndof),xPosError_(xErr),yPosError_(yErr){} 
+    xPos_(x),yPos_(y),dxdz_(dxdz),dydz_(dydz),chi2_(chi2),ndof_(ndof),xPosError_(xErr),yPosError_(yErr)
+    {
+      xPosPrevHit_ = 0.;
+      yPosPrevHit_ = 0.;
+      xPosErrsPrevHit_ = 0.;
+      yPosErrsPrevHit_ = 0.;
+      xPosNextHit_ = 0.;
+      yPosNextHit_ = 0.;
+      xPosErrNextHit_ = 0.;
+      yPosErrNextHit_ = 0.;
+    } 
+  Track(const float x, const float y, const float dxdz, const float dydz, 
+        const float chi2, const float ndof, const float xErr, const float yErr,
+        const float xposPrevHit, const float yposPrevHit, const float xposErrsPrevHit, const float yposErrsPrevHit,
+        const float xposNextHit, const float yposNextHit, const float xposErrNextHit, const float yposErrNextHit):
+    xPos_(x),yPos_(y),dxdz_(dxdz),dydz_(dydz),chi2_(chi2),ndof_(ndof),xPosError_(xErr),yPosError_(yErr)
+    {
+      xPosPrevHit_ = xposPrevHit;
+      yPosPrevHit_ = yposPrevHit;
+      xPosErrsPrevHit_ = xposErrsPrevHit;
+      yPosErrsPrevHit_ = yposErrsPrevHit;
+      xPosNextHit_ = xposNextHit;
+      yPosNextHit_ = yposNextHit;
+      xPosErrNextHit_ = xposErrNextHit;
+      yPosErrNextHit_ = yposErrNextHit;
+    } 
     
     float xPos() const { return xPos_; }
     float yPos() const { return yPos_; }
@@ -21,6 +56,15 @@ class Track : public TObject {
     float xPosErr() const { return xPosError_;}
     float yPosErr() const { return yPosError_; }
 
+    float xPosPrevHit() const     { return xPosPrevHit_; }
+    float yPosPrevHit() const     { return yPosPrevHit_; }
+    float xPosErrsPrevHit() const { return xPosErrsPrevHit_; }
+    float yPosErrsPrevHit() const { return yPosErrsPrevHit_; }
+    float xPosNextHit() const     { return xPosNextHit_; }
+    float yPosNextHit() const     { return yPosNextHit_; }
+    float xPosErrNextHit() const  { return xPosErrNextHit_; }
+    float yPosErrNextHit() const  { return yPosErrNextHit_; }
+    
     friend std::ostream &operator<<(std::ostream& os, const tbeam::Track& tk) {    
       os << "X="       << std::setw(6) << tk.xPos() 
 	 << " Y="      << std::setw(6) << tk.yPos()
@@ -45,7 +89,15 @@ class Track : public TObject {
     //optional requirement
     float xPosError_;//Track impact x-position error
     float yPosError_;//Track impact y-position error 
-    
+    //additional info available from FNAL beam test
+    float xPosPrevHit_;
+    float yPosPrevHit_;
+    float xPosErrsPrevHit_;
+    float yPosErrsPrevHit_;
+    float xPosNextHit_;
+    float yPosNextHit_;
+    float xPosErrNextHit_;
+    float yPosErrNextHit_;
     ClassDef(Track,1)
       };
 }

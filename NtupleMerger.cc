@@ -111,7 +111,18 @@ void NtupleMerger::eventLoop() {
       auto tracks = trigTrackmap_->equal_range(dtemp.event-1); // DUT trigger start from 1 while Telescope trigger start from 0
       for(auto itrks = tracks.first;itrks != tracks.second;++itrks){
 	auto telOutputEvent_ = &itrks->second;
-	tbeam::Track trkTemp(telOutputEvent_->xPos,telOutputEvent_->xPos,telOutputEvent_->dxdz,telOutputEvent_->dydz,telOutputEvent_->chi2ndf,0,telOutputEvent_->xPosErr,telOutputEvent_->yPosErr);
+	tbeam::Track trkTemp(telOutputEvent_->xPos,telOutputEvent_->xPos,
+                             telOutputEvent_->dxdz,telOutputEvent_->dydz,
+                             telOutputEvent_->chi2ndf,0,
+                             telOutputEvent_->xPosErr,telOutputEvent_->yPosErr,
+                             telOutputEvent_->xPosPrevHit,
+		             telOutputEvent_->yPosPrevHit,
+		  	     telOutputEvent_->xPosErrsPrevHit,
+			     telOutputEvent_->yPosErrsPrevHit,
+			     telOutputEvent_->xPosNextHit,
+			     telOutputEvent_->yPosNextHit,
+   	                     telOutputEvent_->xPosErrNextHit,
+			     telOutputEvent_->yPosErrNextHit);
 	dtemp.tracks.push_back(trkTemp);
       }
     }
